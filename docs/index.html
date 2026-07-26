@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iRis-Židenice</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png"
+    href="https://cdn.discordapp.com/attachments/1375893828044722316/1530996422663471214/image.png?ex=6a679b07&is=6a664987&hm=7eae4e051034b9bd78ecec408e29099779945b43f69cad09db95a6d3b4ea8304&">
+</head>
+
+<body>
+  <div class="map-offline-overlay">
+    <div class="map-offline-box">
+      <div class="map-offline-icon-wrapper">
+        <span class="mdi mdi-alert-circle-outline map-offline-icon"></span>
+      </div>
+      <h2 class="map-offline-title">Live mapa je aktuálně mimo provoz</h2>
+      <p class="map-offline-text">Na zprovoznění pečlivě pracujeme.</p>
+    </div>
+  </div>
+  <div class="app-container">
+
+    <!-- Levý panel s menu -->
+    <div id="main-panel-menu" class="d-flex flex-column">
+      <div id="main-menu-home" class="main-menu-item active" data-name="home">
+        <span class="mdi mdi-home"></span>
+        <span class="tooltip">Domů</span>
+      </div>
+      <div id="main-menu-list" class="main-menu-item" data-name="list">
+        <span class="mdi mdi-view-list"></span>
+        <span class="tooltip">Seznam vozidel</span>
+      </div>
+      <div id="main-menu-departures" class="main-menu-item" data-name="departures">
+        <span class="mdi mdi-sign-real-estate"></span>
+        <span class="tooltip">Aktuální odjezdy</span>
+      </div>
+      <div id="main-menu-stoptimetable" class="main-menu-item" data-name="stoptimetable">
+        <span class="mdi mdi-sign-text"></span>
+        <span class="tooltip">Zastávkové jízdní řády</span>
+      </div>
+      <div id="main-menu-events" class="main-menu-item" data-name="events">
+        <span class="mdi mdi-alert"></span>
+        <span class="tooltip">Mimořádné události</span>
+      </div>
+      <div id="main-menu-diversions" class="main-menu-item" data-name="diversions">
+        <span class="mdi mdi-sign-caution"></span>
+        <span class="tooltip">Výluky a změny v dopravě</span>
+      </div>
+      <div id="main-menu-contactcenters" class="main-menu-item" data-name="contactcenters">
+        <span class="mdi mdi-store"></span>
+        <span class="tooltip">Kontaktní centra</span>
+      </div>
+      <a href="https://discord.gg/2b9DMvhysk" target="_blank" id="main-menu-discord" class="main-menu-item mt-auto"
+        data-name="discord">
+        <svg style="width: 22px; height: 22px; fill: #ffffff;" viewBox="0 0 24 24">
+          <path
+            d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.927 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+        </svg>
+        <span class="tooltip">Discord Support</span>
+      </a>
+
+      <div class="settings-wrapper w-100">
+        <div id="main-menu-settings" class="main-menu-item" data-name="settings">
+          <span class="mdi mdi-cog"></span>
+          <span class="tooltip">Nastavení</span>
+        </div>
+        <div class="settings-panel" id="settingsPanel">
+          <div class="settings-title">Vzhled a vrstvy</div>
+          <div class="settings-divider"></div>
+          <div class="settings-item"><input type="checkbox" id="toggleStops" checked><label for="toggleStops">Zobrazit
+              zastávky</label></div>
+          <div class="settings-item"><input type="checkbox" id="toggleVehicle" checked><label
+              for="toggleVehicle">Zobrazit vozidlo</label></div>
+          <div class="settings-divider"></div>
+          <div class="settings-label">Styl mapy</div>
+          <select id="mapStyle" class="settings-select">
+            <option value="light">Světlá mapa</option>
+            <option value="dark">Tmavá mapa</option>
+            <option value="aerial">Letecká mapa</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="main-menu-about" class="main-menu-item" data-name="about">
+        <span class="mdi mdi-help-circle"></span>
+        <span class="tooltip">O aplikaci</span>
+      </div>
+    </div>
+
+    <!-- Jednotný vyskakovací boční panel -->
+    <div id="content-sidebar" class="content-sidebar open">
+      <div class="content-sidebar-header">
+        <span id="content-sidebar-title">Domů</span>
+        <button id="content-sidebar-close" class="content-close-btn"><span class="mdi mdi-close"></span></button>
+      </div>
+      <div class="content-sidebar-body">
+
+        <!-- OBSAH PRO: Domů -->
+        <div class="panel-content" data-panel="home">
+          <div class="search-box-wrapper">
+            <input type="text" placeholder="Vyhledat..." class="search-input">
+            <span class="mdi mdi-close-circle search-clear"></span>
+          </div>
+
+          <div class="transport-list">
+            <div class="transport-item green"><span class="mdi mdi-tram"></span> <span class="label-text">Tramvaje -
+                Brno</span> <span class="count">97</span></div>
+            <div class="transport-item green"><span class="mdi mdi-bus"></span> <span class="label-text">Trolejbusy -
+                Brno</span> <span class="count">49</span></div>
+            <div class="transport-item green"><span class="mdi mdi-bus-side"></span> <span class="label-text">Autobusy -
+                Brno</span> <span class="count">114</span></div>
+            <div class="transport-item green"><span class="mdi mdi-bus-double-decker"></span> <span
+                class="label-text">Autobusy - regionální</span> <span class="count">172</span></div>
+            <div class="transport-item green"><span class="mdi mdi-train"></span> <span class="label-text">Vlaky</span>
+              <span class="count">66</span>
+            </div>
+
+            <div class="sub-item-row">
+              <div class="sub-arrow"><span class="mdi mdi-subdirectory-arrow-right"></span></div>
+              <div class="transport-item red flex-grow"><span class="mdi mdi-train-variant"></span> <span
+                  class="label-text">Vlaky Moravia</span> <span class="count">16</span></div>
+            </div>
+
+            <div class="transport-item green"><span class="mdi mdi-ferry"></span> <span class="label-text">Lodě</span>
+              <span class="count">4</span>
+            </div>
+
+            <div class="transport-space"></div>
+
+            <div class="transport-item gray"><span class="mdi mdi-numeric-9-box-outline"></span> <span
+                class="label-text">Zájmové linky</span> <span class="count">-</span></div>
+            <div class="transport-item gray"><span class="mdi mdi-bus"></span> <span class="label-text">Vybraný typ
+                vozidla</span> <span class="count">-</span></div>
+          </div>
+
+          <div class="legend-footer">
+            <div class="legend-row">
+              <div class="setting ps-2 pe-2">
+                <label>
+                  <span class="switch">
+                    <input type="checkbox" checked data-settingskey="map_showdiversions">
+                    <span class="slider"></span>
+                  </span>
+                  <span class="slidertext ms-2">Výluky</span>
+                </label>
+              </div>
+
+              <div class="setting ps-2 pe-2">
+                <label>
+                  <span class="switch">
+                    <input type="checkbox" checked data-settingskey="map_showstops">
+                    <span class="slider"></span>
+                  </span>
+                  <span class="slidertext ms-2">Zastávky</span>
+                </label>
+              </div>
+
+              <div class="setting ps-2 pe-2">
+                <label>
+                  <span class="switch">
+                    <input type="checkbox" data-settingskey="map_showzones">
+                    <span class="slider"></span>
+                  </span>
+                  <span class="slidertext ms-2">Zóny</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="legend-sub mb-3">
+              <span class="mdi mdi-lightbulb-outline"></span> Všechny možnosti najdete v <u>Nastaveních</u>.
+            </div>
+          </div>
+        </div>
+
+        <!-- OBSAH PRO: Seznam vozidel -->
+        <div class="panel-content" data-panel="vehicle-list" style="display: none;">
+          <div class="vehicle-table-wrapper">
+            <table class="vehicle-table">
+              <thead>
+                <tr>
+                  <th class="sortable-header" id="sort-id-btn">
+                    ID <span id="sort-icon" class="mdi mdi-arrow-up font-xs"></span>
+                  </th>
+                  <th>Linka a směr</th>
+                  <th>Kurz</th>
+                  <th>Zpožd.</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="vehicle-id">1084</td>
+                  <td><span class="line-badge red">1</span> Bystrc, Rakovecká</td>
+                  <td class="vehicle-kurz">00107</td>
+                  <td class="delay red">+2</td>
+                </tr>
+                <tr>
+                  <td class="vehicle-id">1093</td>
+                  <td><span class="line-badge pink">5</span> Štefánikova čtvrť</td>
+                  <td class="vehicle-kurz">00515</td>
+                  <td class="delay red">+2</td>
+                </tr>
+                <tr>
+                  <td class="vehicle-id">1106</td>
+                  <td><span class="line-badge pink">5</span> Ústř. hřbitov - smyčka</td>
+                  <td class="vehicle-kurz">00509</td>
+                  <td class="delay green">včas</td>
+                </tr>
+                <tr>
+                  <td class="vehicle-id">1108</td>
+                  <td><span class="line-badge red">1</span> Řečkovice</td>
+                  <td class="vehicle-kurz">00121</td>
+                  <td class="delay green">včas</td>
+                </tr>
+                <tr>
+                  <td class="vehicle-id">1205</td>
+                  <td><span class="line-badge brown">10</span> Malinovského náměstí</td>
+                  <td class="vehicle-kurz">01003</td>
+                  <td class="delay green">včas</td>
+                </tr>
+                <tr>
+                  <td class="vehicle-id">1551</td>
+                  <td><span class="line-badge blue">6</span> Královo Pole, nádraží</td>
+                  <td class="vehicle-kurz">00606</td>
+                  <td class="delay green">včas</td>
+                </tr>
+                <tr>
+                  <td class="vehicle-id">1709</td>
+                  <td><span class="line-badge teal">3</span> Stará osada</td>
+                  <td class="vehicle-kurz">00310</td>
+                  <td class="delay green">včas</td>
+                </tr>
+                <tr>
+                  <td class="vehicle-id">1711</td>
+                  <td><span class="line-badge dark">X</span> Křídlovická</td>
+                  <td class="vehicle-kurz">00722</td>
+                  <td class="delay green">včas</td>
+                </tr>
+                <tr>
+                  <td class="vehicle-id">1761</td>
+                  <td><span class="line-badge yellow">8</span> Líšeň, Mifkova</td>
+                  <td class="vehicle-kurz">00812</td>
+                  <td class="delay red">+1</td>
+                </tr>
+                <tr>
+                  <td class="vehicle-id">1762</td>
+                  <td><span class="line-badge purple">9</span> Juliánov</td>
+                  <td class="vehicle-kurz">00907</td>
+                  <td class="delay green">včas</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- OBSAH PRO: Mimořádné události -->
+        <div class="panel-content" data-panel="events" style="display: none;">
+          <div class="events-empty-container">
+            <div class="events-success-icon-wrapper">
+              <span class="mdi mdi-check events-success-icon"></span>
+            </div>
+            <p class="events-empty-text">V současné době neevidujeme žádné mimořádné události.</p>
+          </div>
+        </div>
+
+        <div class="panel-content" data-panel="settings" style="display: none;">
+          <div class="settings-container">
+            <h2 class="settings-title">Nastavení</h2>
+
+            <label class="setting-item">
+              <input type="checkbox" id="toggleExclusions" data-settingskey="map_exclusions" checked
+                class="setting-checkbox">
+              <span class="setting-switch"></span>
+              <span class="setting-label">Zobrazovat výluky</span>
+            </label>
+
+            <label class="setting-item">
+              <input type="checkbox" id="toggleStops" data-settingskey="map_showstops" checked class="setting-checkbox">
+              <span class="setting-switch"></span>
+              <span class="setting-label">Zobrazovat zastávky</span>
+            </label>
+
+            <label class="setting-item">
+              <input type="checkbox" id="togglePoles" data-settingskey="map_poles" checked class="setting-checkbox">
+              <span class="setting-switch"></span>
+              <span class="setting-label">Zobrazovat označníky</span>
+            </label>
+
+            <label class="setting-item">
+              <input type="checkbox" id="toggleCenters" data-settingskey="map_centers" checked class="setting-checkbox">
+              <span class="setting-switch"></span>
+              <span class="setting-label">Zobrazovat kontaktní centra</span>
+            </label>
+
+            <label class="setting-item">
+              <input type="checkbox" id="toggleZones" data-settingskey="map_zones" class="setting-checkbox">
+              <span class="setting-switch"></span>
+              <span class="setting-label">Zobrazovat tarifní zóny</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- OBSAH PRO: O aplikaci -->
+        <div class="panel-content" data-panel="about" style="display: none;">
+          <div class="about-container">
+            <p>Aplikace zobrazuje aktuální polohu všech vozidel ze hry <a
+                href="https://www.roblox.com/games/99937669556561/Brno-idenice" class="about-link">Brno Židenice</a> a
+              další informace o vozidlech.
+              Poloha vozidel se přenáší pomocí dopravních dispečinků CEDRIS a RIS. Poloha vozidel je aktualizována
+              přibližně každých 10 sekund.</p>
+
+            <h3>Kontakty:</h3>
+            <div class="about-socials">
+              <!--              <a href="#" class="about-social-item"><span class="mdi mdi-facebook" style="color: #1877f2;"></span>Facebook</a>-->
+              <!--              <a href="#" class="about-social-item"><span class="mdi mdi-twitter" style="color: #1da1f2;"></span>Twitter</a>-->
+              <!--              <a href="#" class="about-social-item"><span class="mdi mdi-youtube" style="color: #ff0000;"></span>YouTube</a>-->
+              <a href="https://www.instagram.com/dpmb_zidenice_rbx?igsh=dnB3OHJ6M2xqcWFu"
+                class="about-social-item"><span class="mdi mdi-instagram" style="color: #e4405f;"></span>Instagram</a>
+              <a href="https://discord.gg/2b9DMvhysk" class="about-social-item"><svg
+                  style="width: 18px; height: 18px; fill: #5865F2;" viewBox="0 0 24 24">
+                  <path
+                    d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.927 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+                </svg>Discord</a>
+            </div>
+
+            <p class="about-email">
+              <span class="mdi mdi-email-outline"></span> <a
+                href="mailto:info-zatim-neni@Brno-roblox.cz">info-zatim-neni@Brno-roblox.cz</a>
+            </p>
+
+            <div class="about-footer">
+              © Brno Židenice 2026
+            </div>
+          </div>
+        </div>
+
+        <!-- ŠABLONA PRO OSTATNÍ PANELY (Zelený výkřičník) -->
+        <div class="panel-content" data-panel="work-in-progress" style="display: none;">
+          <div class="work-in-progress-container">
+            <span class="mdi mdi-alert-circle-outline wip-icon"></span>
+            <h3>Na této funkci pracujeme</h3>
+            <p>Tato sekce bude brzy k dispozici.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mapa -->
+    <div id="map"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+  <script src="config.js"></script>
+  <script src="map.js"></script>
+</body>
+
+</html>

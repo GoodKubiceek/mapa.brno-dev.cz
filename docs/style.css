@@ -1,0 +1,901 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overscroll-behavior: none;
+}
+
+.app-container {
+  display: flex !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.d-flex { display: flex !important; }
+.flex-column { flex-direction: column !important; }
+.w-100 { width: 100% !important; }
+.flex-grow { flex-grow: 1 !important; }
+.mt-auto { margin-top: auto !important; }
+
+/* Levý panel s menu */
+#main-panel-menu {
+  width: 60px;
+  background-color: #388e3c;
+  padding: 0;
+  z-index: 1000;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  position: relative;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.main-menu-item {
+  color: white;
+  text-decoration: none;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  width: 60px; 
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 !important;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  margin-bottom: 0 !important;
+  position: relative;
+  background-color: transparent;
+}
+
+.main-menu-item:hover{
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+.main-menu-item.active {
+  background-color: #ffd33a !important;
+  color: #000000 !important;
+}
+
+/* Vyskakovací boční panel - pevně 439px a ostré hrany */
+#content-sidebar,
+.content-sidebar {
+  position: absolute !important;
+  top: 0 !important;
+  left: 60px !important;
+  width: 439px !important;
+  min-width: 439px !important;
+  max-width: 439px !important;
+  height: 100% !important;
+  background: #ffffff !important;
+  box-shadow: 4px 0 15px rgba(0,0,0,0.15) !important;
+  z-index: 900 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  transform: translateX(-100%) !important;
+  transition: transform 0.3s ease !important;
+  border-radius: 0 !important;
+}
+
+#content-sidebar.open,
+.content-sidebar.open {
+  transform: translateX(0) !important;
+}
+
+.content-sidebar-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 16px 20px !important;
+  font-size: 20px !important;
+  font-weight: 500 !important;
+  color: #333 !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid #eaeaea !important;
+  border-radius: 0 !important;
+}
+
+.content-close-btn {
+  background: none !important;
+  border: none !important;
+  font-size: 20px !important;
+  cursor: pointer !important;
+  color: #777 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.content-sidebar-body {
+  padding: 16px 20px !important;
+  overflow-y: auto !important;
+  flex-grow: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  position: relative !important;
+}
+
+/* Vyhledávání */
+.search-box-wrapper {
+  position: relative !important;
+  width: 100% !important;
+  margin-bottom: 14px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.search-input {
+  width: 100% !important;
+  padding: 10px 36px 10px 14px !important;
+  border: 1px solid #ccc !important;
+  border-radius: 0 !important;
+  outline: none !important;
+  font-size: 14px !important;
+  background: #fff !important;
+  box-sizing: border-box !important;
+}
+
+.search-input:focus {
+  border-color: #388e3c !important;
+}
+
+.search-clear {
+  position: absolute !important;
+  right: 12px !important;
+  font-size: 18px !important;
+  color: #777 !important;
+  cursor: pointer !important;
+}
+
+/* Seznam dopravních položek */
+.transport-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.transport-item {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 !important;
+  color: white !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+.transport-item.green {
+  background-color: #2e7d32 !important;
+}
+
+.transport-item.red {
+  background-color: #c62828 !important;
+}
+
+.transport-item.gray {
+  background-color: #f8f9fa !important;
+  color: #333 !important;
+  border: 1px solid #ccc !important;
+}
+
+.transport-item .mdi {
+  font-size: 18px !important;
+  padding: 12px 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.transport-item.gray .mdi {
+  color: #555 !important;
+}
+
+.label-text {
+  flex-grow: 1 !important;
+  padding-left: 4px !important;
+}
+
+.count {
+  background: rgba(0, 0, 0, 0.2) !important;
+  padding: 12px 16px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  min-width: 20px !important;
+  text-align: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.transport-item.gray .count {
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: #333 !important;
+}
+
+/* Podřízená položka */
+.sub-item-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-left: 20px !important;
+}
+
+.sub-arrow {
+  color: #777 !important;
+  font-size: 18px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Spodní patka s přepínači */
+/* Spodní patka s přepínači */
+.legend-footer {
+  margin-top: auto !important;
+  padding-top: 16px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  border-top: 1px solid #eaeaea;
+}
+
+.legend-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin-bottom: 12px !important;
+  padding: 0 !important;
+}
+
+.setting {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 !important;
+}
+
+.setting label {
+  display: flex !important;
+  align-items: center !important;
+  cursor: pointer !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: #333 !important;
+  white-space: nowrap !important;
+}
+
+/* Vzhled přepínače (switch) */
+.switch {
+  position: relative !important;
+  display: inline-block !important;
+  width: 40px !important;
+  height: 22px !important;
+  flex-shrink: 0 !important;
+}
+
+.switch input {
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.slider {
+  position: absolute !important;
+  cursor: pointer !important;
+  top: 0 !important; 
+  left: 0 !important; 
+  right: 0 !important; 
+  bottom: 0 !important;
+  background-color: #b0bec5 !important;
+  transition: background-color 0.25s ease !important;
+  border-radius: 12px !important;
+}
+
+.slider:before {
+  position: absolute !important;
+  content: "" !important;
+  height: 16px !important;
+  width: 16px !important;
+  left: 3px !important;
+  bottom: 3px !important;
+  background-color: white !important;
+  transition: transform 0.25s ease !important;
+  border-radius: 50% !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3) !important;
+}
+
+.switch input:checked + .slider {
+  background-color: #2e7d32 !important;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(18px) !important;
+}
+
+.slidertext {
+  margin-left: 6px !important;
+  font-size: 13px !important;
+  color: #333 !important;
+}
+
+/* Spodní patka s přepínači */
+.legend-footer {
+  margin-top: auto !important;
+  padding-top: 16px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  border-top: 1px solid #eaeaea;
+}
+
+.legend-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin-bottom: 12px !important;
+  padding: 0 !important;
+}
+
+.setting {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 !important;
+}
+
+.setting label {
+  display: flex !important;
+  align-items: center !important;
+  cursor: pointer !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: #333 !important;
+  white-space: nowrap !important;
+}
+
+/* Vzhled přepínače (switch) */
+.switch {
+  position: relative !important;
+  display: inline-block !important;
+  width: 40px !important;
+  height: 22px !important;
+  flex-shrink: 0 !important;
+}
+
+.switch input {
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.slider {
+  position: absolute !important;
+  cursor: pointer !important;
+  top: 0 !important; 
+  left: 0 !important; 
+  right: 0 !important; 
+  bottom: 0 !important;
+  background-color: #b0bec5 !important;
+  transition: background-color 0.25s ease !important;
+  border-radius: 12px !important;
+}
+
+.slider:before {
+  position: absolute !important;
+  content: "" !important;
+  height: 16px !important;
+  width: 16px !important;
+  left: 3px !important;
+  bottom: 3px !important;
+  background-color: white !important;
+  transition: transform 0.25s ease !important;
+  border-radius: 50% !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3) !important;
+}
+
+.switch input:checked + .slider {
+  background-color: #2e7d32 !important;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(18px) !important;
+}
+
+.slidertext {
+  margin-left: 6px !important;
+  font-size: 13px !important;
+  color: #333 !important;
+}
+
+.legend-sub {
+  font-size: 12px !important;
+  color: #666 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  width: 100% !important;
+  margin-bottom: 4px !important;
+  text-align: center;
+}
+
+.legend-sub u {
+  color: #2e7d32 !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  border-bottom: 1px dotted #2e7d32 !important;
+}
+
+/* Kličová oprava pro mapu, aby zabírala celou pravou část */
+#map {
+  flex-grow: 1 !important;
+  width: 100% !important;
+  height: 100vh !important;
+  position: relative !important;
+}
+
+/* Panel nastavení (vyjíždějící z menu) */
+.settings-wrapper { position: relative; width: 100%; }
+.settings-panel {
+  position: absolute;
+  top: 0;
+  left: 60px;
+  width: 300px !important; /* Zvětšeno z 210px na 300px (nebo si zadej vlastní šířku) */
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(14px);
+  border-radius: 0 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  padding: 16px; /* Mírně zvětšeno pro lepší vzhled */
+  opacity: 0;
+  transform: translateX(-10px);
+  pointer-events: none;
+  transition: all 0.25s ease;
+  z-index: 1200;
+}
+.settings-panel.open { opacity: 1; transform: translateX(0); pointer-events: auto; }
+/* ================================================================= */
+/* STYLY PRO TOOLTIPY V LEVÉM MENU */
+/* ================================================================= */
+
+.main-menu-item {
+  position: relative !important;
+}
+
+/* Vzhled vyskakovací bubliny */
+.main-menu-item .tooltip {
+  visibility: hidden;
+  opacity: 0;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  text-align: center;
+  padding: 6px 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  
+  /* Pozice přesně vpravo od 60px širokého menu */
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  
+  /* Plynulý přechod při zobrazení */
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  pointer-events: none; /* Zabrání blikání myši, pokud na tooltip najedete */
+}
+
+/* Malý šipkový zobáček ukazující vlevo na tlačítko */
+.main-menu-item .tooltip::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  transform: translateY(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #1a1a1a transparent transparent;
+}
+
+/* Zobrazení tooltipu při najetí myši na položku menu */
+.main-menu-item:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+.panel-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+}
+
+.work-in-progress-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  text-align: center;
+  padding: 40px 20px;
+  color: #555;
+}
+
+.wip-icon {
+  font-size: 64px !important;
+  color: #388e3c !important; /* Změněno na zelenou barvu */
+  margin-bottom: 16px;
+}
+
+.work-in-progress-container h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.work-in-progress-container p {
+  margin: 0;
+  font-size: 14px;
+  color: #777;
+}
+/* Kontejner tabulky pro scrollování a zaoblení */
+.vehicle-table-wrapper {
+  width: 100%;
+  max-height: calc(100vh - 120px); /* Přizpůsobení výšce okna */
+  overflow-y: auto;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+/* Samotná tabulka */
+.vehicle-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+  table-layout: fixed; /* Zajišťuje fixní poměry sloupců (1:1 rozložení) */
+}
+
+/* Definice šířek sloupců pro přesné rozložení */
+.vehicle-table th:nth-child(1), .vehicle-table td:nth-child(1) { width: 18%; } /* ID */
+.vehicle-table th:nth-child(2), .vehicle-table td:nth-child(2) { width: 50%; } /* Linka a směr */
+.vehicle-table th:nth-child(3), .vehicle-table td:nth-child(3) { width: 18%; } /* Kurz */
+.vehicle-table th:nth-child(4), .vehicle-table td:nth-child(4) { width: 14%; text-align: right; padding-right: 15px; } /* Zpožd. */
+
+/* Hlavička tabulky */
+.vehicle-table th {
+  background: #f4f5f7;
+  color: #333;
+  font-weight: 600;
+  padding: 10px 8px;
+  border-bottom: 2px solid #dcdcdc;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* Řádky tabulky */
+.vehicle-table td {
+  padding: 8px;
+  border-bottom: 1px solid #eaeaea;
+  color: #222;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Střídání barev řádků (Zebra efekt) */
+.vehicle-table tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.vehicle-table tbody tr:nth-child(even) {
+  background-color: #f8f9fa; /* Jemně šedý, střídající se řádek */
+}
+
+/* Hover efekt pro lepší přehlednost */
+.vehicle-table tr:hover {
+  background-color: #f1f3f5 !important;
+}
+
+/* Detaily buněk */
+.vehicle-id {
+  font-weight: 500;
+  color: #2c3e50;
+  padding-left: 10px !important;
+}
+
+.vehicle-kurz {
+  color: #555;
+  font-family: monospace;
+}
+
+/* Zpoždění */
+.delay {
+  font-weight: 600;
+}
+
+.delay.green {
+  color: #27ae60;
+}
+
+.delay.red {
+  color: #c0392b;
+}
+
+/* Zaoblené a stylové badge pro linky (odpovídají obrázku) */
+.line-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 11px;
+  margin-right: 6px;
+  min-width: 22px;
+  text-align: center;
+}
+
+.line-badge.red { background-color: #e74c3c; }
+.line-badge.pink { background-color: #d81b60; }
+.line-badge.brown { background-color: #795548; }
+.line-badge.blue { background-color: #1e88e5; }
+.line-badge.teal { background-color: #00897b; }
+.line-badge.dark { background-color: #455a64; }
+.line-badge.yellow { background-color: #f1c40f; color: #000; }
+.line-badge.purple { background-color: #8e44ad; }
+
+.sortable-header {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.sortable-header:hover {
+  background-color: #e9ecef !important;
+}
+.events-empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  height: 100%;
+}
+
+.events-success-icon-wrapper {
+  width: 72px;
+  height: 72px;
+  background-color: #388e3c; /* Zelená barva jako na obrázku */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 10px rgba(56, 142, 60, 0.3);
+}
+
+.events-success-icon {
+  color: #ffffff;
+  font-size: 42px;
+}
+
+.events-empty-text {
+  color: #333333;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0;
+}
+.about-container {
+  padding: 20px;
+  color: #333333;
+  font-size: 13.5px;
+  line-height: 1.6;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.about-container p {
+  margin-bottom: 16px;
+}
+
+.about-container h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.about-link {
+  color: #2e7d32;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.about-link:hover {
+  text-decoration: underline;
+}
+
+.about-list {
+  margin: 0 0 16px 20px;
+  padding: 0;
+}
+
+.about-list li {
+  margin-bottom: 4px;
+}
+
+.about-socials {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.about-social-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #0077cc;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.about-social-item:hover {
+  text-decoration: underline;
+}
+
+.about-email {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+.about-email a {
+  color: #2e7d32;
+  text-decoration: none;
+}
+
+.about-email a:hover {
+  text-decoration: underline;
+}
+
+.about-footer {
+  font-size: 12px;
+  color: #777;
+  border-top: 1px solid #eee;
+  padding-top: 16px;
+  margin-top: 10px;
+}
+.settings-container {
+  padding: 20px;
+  color: #333333;
+  font-family: inherit;
+}
+
+.settings-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Skrytí výchozího checkboxu */
+.setting-checkbox {
+  display: none;
+}
+
+/* Vzhled přepínače (tlačítka) */
+.setting-switch {
+  width: 44px;
+  height: 24px;
+  background-color: #cccccc;
+  border-radius: 4px;
+  position: relative;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+/* Bílá kostka uvnitř přepínače */
+.setting-switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  background-color: #ffffff;
+  border-radius: 2px;
+  transition: transform 0.2s ease;
+}
+
+/* Stav zapnuto (zelená barva) */
+.setting-checkbox:checked + .setting-switch {
+  background-color: #357a38;
+}
+
+/* Posunutí bílé kostky doprava při zapnutí */
+.setting-checkbox:checked + .setting-switch::after {
+  transform: translateX(20px);
+}
+
+.setting-label {
+  font-size: 14px;
+  color: #333333;
+}
+/* Kontejner, který přesně pasuje na rozměry mapy a nic jiného neovlivňuje */
+.map-offline-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5); /* Čisté světlé pozadí přes mapu */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500; /* Nad mapou, ale pod plovoucími panely menu */
+}
+
+.map-offline-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 30px;
+}
+
+.map-offline-icon-wrapper {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.map-offline-icon {
+  color: #388e3c;
+  font-size: 56px;
+}
+
+.map-offline-title {
+  color: #333333;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.map-offline-text {
+  color: #666666;
+  font-size: 14px;
+  margin: 0;
+}
